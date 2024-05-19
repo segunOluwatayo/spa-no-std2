@@ -2,43 +2,42 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { User } from '../models/user.model';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private baseUrl = 'http://localhost:3001/api/users';
-  private currentUserSubject: BehaviorSubject<any>;  // Specify the type expected within the BehaviorSubject
-  public currentUser: Observable<any>;
+  private currentUserSubject: BehaviorSubject<User | null>;
+  public currentUser: Observable<User | null>;
 
   constructor(private http: HttpClient) {
-    const storedUserJSON = typeof window !== 'undefined' ? localStorage.getItem('currentUser') : null;
-    const storedUser = storedUserJSON ? JSON.parse(storedUserJSON) : null; // Safely parse the JSON only if it's not null
-    this.currentUserSubject = new BehaviorSubject(storedUser);
+    this.currentUserSubject = new BehaviorSubject<User | null>(null);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  signup(user: Partial<any>): Observable<any> {  // Ensure to specify type for Partial
-    return this.http.post<any>(`${this.baseUrl}/signup`, user).pipe(
-      map(user => {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-        this.currentUserSubject.next(user);
-        return user;
+  public get currentUserValue(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  signup(userData: { name: string; email: string; password: string; username: string }): Observable<{ token: string; user: User }> {
+    return this.http.post<{ token: string; user: User }>(`${this.baseUrl}/signup`, userData).pipe(
+      map((response) => {
+        localStorage.setItem('token', response.token);
+        this.currentUserSubject.next(response.user);
+        return response;
       })
     );
   }
 
-  login(user: Partial<any>): Observable<any> {  // Ensure to specify type for Partial
-    return this.http.post<any>(`${this.baseUrl}/login`, user).pipe(
-      map(user => {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-        this.currentUserSubject.next(user);
-        console.log('User:', user); 
-        return user;
+  login(credentials: { email: string; password: string }): Observable<{ token: string; user: User }> {
+    return this.http.post<{ token: string; user: User }>(`${this.baseUrl}/login`, credentials).pipe(
+      map((response) => {
+        localStorage.setItem('token', response.token);
+        this.currentUserSubject.next(response.user);
+        return response;
       })
     );
   }

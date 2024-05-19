@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AnswerService } from '../services/answer.service';
+import { AuthService } from '../services/auth.service';
 import { Answer } from '../models/answer.model';
 
 @Component({
@@ -20,27 +21,39 @@ export class AnswerSubmissionComponent {
     },
     question: this.questionId
   };
-    constructor(private answerService: AnswerService) {}
-    
-    submitAnswer(): void {
-      console.log('Submitting answer:', this.answer);
-      this.answer.author = {
-        _id: localStorage.getItem('userId') || '',
-        name: '',
-        email: '',
-        password: ''
-      };
-      // Set the question field here
-      this.answer.question = this.questionId;
-      this.answerService.createAnswer(this.answer).subscribe(
-        () => {
-          this.answer.content = ''; // Clear the answer input field
-        },
-        (error) => {
-          console.error('Error submitting answer:', error);
-        }
-      );
+
+  constructor(
+    private answerService: AnswerService,
+    private authService: AuthService
+  ) {}
+
+  submitAnswer(): void {
+    console.log('Submitting answer:', this.answer);
+  
+    // Get the current user from the AuthService
+    const currentUser = this.authService.currentUserValue;
+    if (currentUser) {
+      this.answer.author = currentUser._id; // Set only the user's _id as the author
     }
-    
-    
-    }
+  
+    // Set the question field here
+    this.answer.question = this.questionId;
+  
+    // Create a new answer object with only the necessary fields
+    const answerToSubmit: Answer = {
+      _id: '',
+      content: this.answer.content,
+      author: this.answer.author as string,
+      question: this.answer.question
+    };
+  
+    this.answerService.createAnswer(this.questionId, answerToSubmit).subscribe(
+      () => {
+        this.answer.content = ''; // Clear the answer input field
+      },
+      (error) => {
+        console.error('Error submitting answer:', error);
+      }
+    );
+  }
+}

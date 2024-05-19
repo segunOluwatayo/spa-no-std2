@@ -11,7 +11,7 @@ exports.createAnswer = async (req, res) => {
 
     const answer = new Answer({
       content,
-      author: req.userId,
+      author: req.user._id,
       question: questionId,
     });
 

@@ -19,12 +19,17 @@ export class AnswerService {
     return this.http.get<Answer>(`${this.baseUrl}/${id}`);
   }
 
-  createAnswer(answer: Answer): Observable<Answer> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    });
-    return this.http.post<Answer>(this.baseUrl, answer, { headers });
-  }
+ createAnswer(questionId: string, answer: Answer): Observable<Answer> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  });
+  // Include questionId in the request body
+  const requestBody = {
+    ...answer,
+    questionId: questionId
+  };
+  return this.http.post<Answer>(this.baseUrl, requestBody, { headers });
+}
 
   updateAnswer(id: string, answer: Partial<Answer>): Observable<Answer> {
     const headers = new HttpHeaders({
