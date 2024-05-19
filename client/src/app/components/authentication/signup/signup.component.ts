@@ -14,9 +14,14 @@ export class SignupComponent {
   password: string = '';
   username: string = ''; // Add the username property
   errorMessage: string = '';
+  showPassword = false; // Add this property to track password visibility
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+  
   signup(form: NgForm): void {
     if (form.invalid) {
       this.errorMessage = 'Please provide valid data.';
