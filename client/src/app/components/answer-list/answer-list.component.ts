@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AnswerService } from '../services/answer.service';
 import { Answer } from '../models/answer.model';
 import { RatingService } from '../services/rating.service';
@@ -10,21 +11,26 @@ import { UpvoteService } from '../services/upvote.service';
   styleUrls: ['./answer-list.component.css']
 })
 export class AnswerListComponent implements OnInit {
-  @Input() questionId: string = '';
+  questionId: string = '';
   answers: Answer[] = [];
   stars: number[] = [1, 2, 3, 4, 5];
 
   constructor(
+    private route: ActivatedRoute,
     private answerService: AnswerService,
     private ratingService: RatingService,
     private upvoteService: UpvoteService
   ) {}
 
   ngOnInit(): void {
-    this.loadAnswers();
+    this.route.params.subscribe(params => {
+      this.questionId = params['questionId'];
+      this.loadAnswers();
+    });
   }
 
   loadAnswers(): void {
+    console.log('Question ID:', this.questionId);
     this.answerService.getAnswers(this.questionId).subscribe(
       (data: Answer[]) => {
         this.answers = data;
@@ -34,6 +40,7 @@ export class AnswerListComponent implements OnInit {
       }
     );
   }
+
   rateAnswer(id: string, rating: number): void {
     this.ratingService.rateAnswer(id, rating).subscribe(
       () => {

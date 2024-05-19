@@ -22,14 +22,18 @@ export class CommentListComponent implements OnInit {
   }
 
   loadComments(): void {
-    this.commentsService.getComments(this.answerId).subscribe(
-      (data: Comment[]) => {
-        this.comments = data;
-      },
-      (error: any) => {
-        console.error('Error fetching comments:', error);
-      }
-    );
+    if (this.answerId) {
+      this.commentsService.getComments(this.answerId).subscribe(
+        (data: Comment[]) => {
+          this.comments = data;
+        },
+        (error: any) => {
+          console.error('Error fetching comments:', error);
+        }
+      );
+    } else {
+      console.error('Invalid answerId:', this.answerId);
+    }
   }
 
   submitComment(): void {
