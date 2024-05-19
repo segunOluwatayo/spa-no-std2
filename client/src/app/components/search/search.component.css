@@ -1,0 +1,19 @@
+/* search.component.css */
+input[type="text"] {
+  padding: 5px;
+  width: 80%;
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--dark-color);
+}

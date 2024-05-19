@@ -1,0 +1,42 @@
+/* question-list.component.css */
+ul {
+  list-style-type: none;
+  padding: 0;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+li {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2,
+h3 {
+  color: var(--heading-color);
+}
+
+a {
+  color: var(--primary-color);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--dark-color);
+}

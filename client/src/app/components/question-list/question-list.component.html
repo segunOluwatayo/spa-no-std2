@@ -1,0 +1,14 @@
+<!-- question-list.component.html -->
+<h2>Questions</h2>
+<ul>
+  <li *ngFor="let question of questions">
+    <h3>{{ question.title }}</h3>
+    <p>{{ question.description }}</p>
+    <small>Author: {{ question.author.name }}</small>
+    <br />
+    <a [routerLink]="['/question', question._id]">View Answers</a>
+    <br />
+    <!-- Replace the anchor tag with the app-answer-submission component -->
+    <app-answer-submission [questionId]="question._id"></app-answer-submission>
+  </li>
+</ul>

@@ -1,0 +1,22 @@
+<!-- answer-list.component.html -->
+<h3>Answers</h3>
+<ul>
+  <li *ngFor="let answer of answers">
+    <p>{{ answer.content }}</p>
+    <small>Author: {{ answer.author.name }}</small>
+    <br />
+
+    <div class="star-rating">
+      <span
+        *ngFor="let star of stars"
+        [ngClass]="getStarClass(answer.rating || 0, star)"
+        (click)="rateAnswer(answer._id, star)"
+      ></span>
+    </div>
+
+    <button (click)="upvoteAnswer(answer._id)">Upvote</button>
+    <small>{{ answer.upvotes?.length ?? 0 }} Upvotes</small>
+
+    <app-comment-list [answerId]="answer._id"></app-comment-list>
+  </li>
+</ul>

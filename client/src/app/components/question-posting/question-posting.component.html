@@ -1,0 +1,22 @@
+<!-- question-posting.component.html -->
+<h2>Ask a Question</h2>
+<form (ngSubmit)="postQuestion()">
+  <label for="title">Title:</label>
+  <input
+    type="text"
+    id="title"
+    [(ngModel)]="question.title"
+    name="title"
+    required
+  />
+
+  <label for="description">Description:</label>
+  <textarea
+    id="description"
+    [(ngModel)]="question.description"
+    name="description"
+    required
+  ></textarea>
+
+  <button type="submit">Post Question</button>
+</form>
