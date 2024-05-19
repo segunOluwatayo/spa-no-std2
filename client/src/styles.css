@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+/* Import Helvetica */
+@import url('https://fonts.googleapis.com/css?family=Helvetica'); 
+
+/* Apply Helvetica to the body globally */
+body {
+    font-family: 'Helvetica', sans-serif; /* Fallback to sans-serif if Helvetica isn't available */
+}
